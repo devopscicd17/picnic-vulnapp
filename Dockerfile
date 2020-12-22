@@ -11,6 +11,9 @@ FROM ubuntu:18.04
 
 LABEL maintainer Ihab Hag Shamas "ihab.hagshamas@teampicnic.com"
 
+ADD NAME .
+ADD VERSION .
+
 EXPOSE 8080 20 21 139 445 6200 137/udp 138/udp
 
 ENV DEBIAN_FRONTEND=noninteractive
