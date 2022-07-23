@@ -1,32 +1,26 @@
-on: [ push, workflow_dispatch ]
-
-env:
-  IMAGE_NAME: ${{ github.repository }}:${{ github.sha }}
+name: Prisma Cloud IaC Scan Example
+on: [ pull_request ]
 
 jobs:
-  build-and-scan:
-    name: Build and scan image
+  prisma_cloud_iac_scan:
     runs-on: ubuntu-latest
-
+    name: Run Prisma Cloud IaC Scan to check 
     steps:
-      - name: Check out the repository
+      - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Build the image
-        run: docker build -t $IMAGE_NAME .
-
-      - name: Prisma Cloud image scan
-        id: scan
-        uses: PaloAltoNetworks/prisma-cloud-scan@v1
+      - name: Run Scan on IaC files in the repository
+        uses: prisma-cloud-shiftleft/iac-scan-action@v1
+        id: iac-scan
         with:
-          pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
-          pcc_user: ${{ secrets.PCC_USER }}
-          pcc_pass: ${{ secrets.PCC_PASS }}
-          image_name: ${{ env.IMAGE_NAME }}
-
-      # (Optional) for compatibility with GitHub's code scanning alerts
-      #- name: Upload SARIF file
-        #if: ${{ always() }} # necessary if using failure thresholds in the image scan
-      #  uses: github/codeql-action/upload-sarif@v1
-       # with:
-         # sarif_file: ${{ steps.scan.outputs.sarif_file }}
+          prisma_api_url: 'https://api.prismacloud.io'
+          access_key: ${{ secrets.PRISMA_CLOUD_ACCESS_KEY }}
+          secret_key: ${{ secrets.PRISMA_CLOUD_SECRET_KEY }}
+          asset_name: 'my-asset-name'
+          template_type: 'TF'
+          template_version: '0.13'
+      - name: Upload scan result artifact
+        uses: actions/upload-artifact@v2
+        if: success() || failure()
+        with:
+          name: iac_scan_result
+          path: ${{ steps.iac-scan.outputs.iac_scan_result_path }}
