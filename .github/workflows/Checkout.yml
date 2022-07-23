@@ -1,4 +1,4 @@
-name: Prisma Cloud IaC Scan Example
+name: Prisma Cloud IaC Scan Demo
 on: [ pull_request ]
 
 jobs:
