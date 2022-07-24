@@ -3,7 +3,7 @@
 
 - name: Scan image
   uses: PaloAltoNetworks/prisma-cloud-scan@v1
-  with:
+  with: 
 pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
 pcc_user: ${{ secrets.PCC_USER }}
 pcc_pass: ${{ secrets.PCC_PASS }}
