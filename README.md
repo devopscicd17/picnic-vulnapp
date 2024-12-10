@@ -1,5 +1,7 @@
 # The Picnic Vulnerable Web Application
 
+Hello
+
 This image contains multiple vulnerabilities and must only be used to simulate a vulnerability assessment exercise.
 
 
